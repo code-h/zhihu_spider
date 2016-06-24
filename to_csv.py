@@ -8,6 +8,7 @@ sys.setdefaultencoding("utf-8")
 import csv
 from pymongo import MongoClient
 import time
+import os
 
 client=MongoClient()
 db=client['my_zhihu_data']
@@ -15,11 +16,14 @@ con=db['zhihu__user__profile']
 
 def mongo_to_csv():
     CNT=0
-    with open('zhihu_user_data_30k.csv', "wb") as f:
+    if os.path.exists('./csv') is False :
+        os.mkdir('./csv')
+    with open('./csv/zhihu_user_data_30k.csv', "wb") as f:
         start_time = time.time()
         csv_writer = csv.writer(f)
         csv_writer.writerow([
         '用户名',
+        '头像',
         '被赞同数',
         '被感谢数',
         '关注了',
@@ -36,6 +40,7 @@ def mongo_to_csv():
         for user in con.find():
             csv_writer.writerow([
             user['user_name'],
+            user['user_avatar'],
             user['user_be_agreed'],
             user['user_be_thanked'],
             user['user_followees'],
