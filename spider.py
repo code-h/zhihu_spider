@@ -26,25 +26,25 @@ class Spider():
 
         #cookie要自己从浏览器获取
         self.header["User-Agent"]="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:35.0) Gecko/20100101 Firefox/35.0"
-        self.cookies={"q_c1":"8074ec0c513747b090575cec4a547cbd|1459957053000|1459957053000",
-                      "l_cap_id":'"Y2MzODMyYjgzNWNjNGY4YzhjMDg4MWMzMWM2NmJmZGQ=|1462068499|cd4a80252719f069cc467a686ee8c130c5a278ae"',
-                      "cap_id":'"YzIwNjMwNjYyNjk0NDcyNTkwMTFiZTdiNmY1YzIwMjE=|1462068499|efc68105333307319525e1fc911ade8151d9e6a6"',
-                      "d_c0":'"AGAAI9whuwmPTsZ7YsMeA9d_DTdC6ijrE4A=|1459957053"',
-                      "_za":"9b9dde53-9e53-4ed1-a17f-363b875a8107",
-                      "login":'"YWQyYzQ4ZDYyOTAwNDVjNTg2ZmY3MDFkY2QwODI5MGY=|1462068522|49dd99d3c8330436f211a130209b4c56215b8ec3"',
-                      "__utma":"51854390.803819812.1462069647.1462069647.1462069647.1",
-                      "__utmz":"51854390.1462069647.1.1.utmcsr=baidu|utmccn=(organic)|utmcmd=organic",
-                      "_xsrf":"6b32002d2d529794005f7b70b4ad163e",
+        self.cookies={"q_c1":"0ccc0032c7de427b9a60b372811a9def|1465797740000|1465797740000",
+                      "l_cap_id":'"Mzk2YWE5YjVhMjVhNDU0MThmYjYyYzM1N2VmNjgxNDQ=|1465797740|85024d9a22de44df66e6d09d3dde66c8eda33f87"',
+                      "cap_id":'"YjBmODNmMjcyM2MzNDk1MTkxYTk0ZDZmMzcyMjdkMTU=|1465797740|de1d96022ab5299ffb18788f2d8f0dc46da31296"',
+                      "d_c0":'"AACANE4qEgqPTi0DK6P2CPRHcV9ebgYC2Z8=|1465797741"',
+                      "_za":"e762b9d7-c8d3-4d07-afdf-90aab4184ba9",
+                      "login":'"OWIyMWY5OGVjOWIxNGI4ZGFhNjc0ODkxMGUzNWQ1MGI=|1465797750|08bd76ed073ec1d81694558bf0336cb645356e72"',
+                      "__utma":"51854390.101148435.1466736718.1466736718.1466738576.2",
+                      "__utmz":"51854390.1466738576.2.2.utmcsr=zhihu.com|utmccn=(referral)|utmcmd=referral|utmcct=/",
+                      "_xsrf":"6613cd948f1e44365dfb31dde644e389",
                       "_zap":"a769d54e-78bf-44af-8f24-f9786a00e322",
-                      "__utmb":"51854390.4.10.1462069647",
+                      "__utmb":"51854390.3.9.1466738838982",
                       "__utmc":"51854390",
                       "l_n_c":"1",
-                      "z_c0":"Mi4wQUFBQWNJQW9BQUFBWUFBajNDRzdDUmNBQUFCaEFsVk5LdkpNVndCRlQzM1BYVEhqbWk0VngyVkswSVdpOXhreDJB|1462068522|eed70f89765a9dd2fdbd6ab1aabd40f7c23ea283",
+                      "z_c0":"Mi4wQUFDQVBvUkNBQUFBQUlBMFRpb1NDaGNBQUFCaEFsVk5kdG1GVndDVU9RR1NJRElLRU1uZ3hiV2NyTmdzdEpYczB3|1465797750|bf5ba241e9db5f544d70599d90aa5df24ae3e86c",
                       "s-q":"%E4%BA%91%E8%88%92",
                       "s-i":"2",
                       "sid":"1jsjlbsg",
                       "s-t":"autocomplete",
-                      "__utmv":"51854390.100--|2=registration_date=20140316=1^3=entry_date=20140316=1",
+                      "__utmv":"51854390.100-1|2=registration_date=20141130=1^3=entry_date=20141130=1",
                       "__utmt":"1"}
 
     def get_user_data(self):
@@ -70,6 +70,7 @@ class Spider():
     def analy_profile(self,html_text):
         tree=html.fromstring(html_text)
         self.user_name=self.get_xpath_source(tree.xpath("//a[@class='name']/text()"))
+        self.user_avatar=self.get_xpath_source(tree.xpath("//img[@class='Avatar Avatar--l']/@src"))
         self.user_location=self.get_xpath_source(tree.xpath("//span[@class='location item']/@title"))
         self.user_gender=self.get_xpath_source(tree.xpath("//span[@class='item gender']/i/@class"))
         if "female" in self.user_gender and self.user_gender:
@@ -106,6 +107,7 @@ class Spider():
     def print_data_out(self):
         print "*" * 60
         print '用户名:%s\n' % self.user_name
+        print '用户头像:%s\n' % self.user_avatar
         print "用户性别:%s\n" % self.user_gender
         print '用户地址:%s\n' % self.user_location
         print "被同意:%s\n" % self.user_be_agreed
@@ -121,6 +123,7 @@ class Spider():
     def store_data_to_mongo(self):
         new_profile = Zhihu_User_Profile(
         user_name=self.user_name,
+        user_avatar=self.user_avatar,
         user_be_agreed=self.user_be_agreed,
         user_be_thanked=self.user_be_thanked,
         user_followees=self.user_followees,

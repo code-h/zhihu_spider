@@ -12,6 +12,7 @@ mongoengine.connect('my_zhihu_data')
 
 class Zhihu_User_Profile(mongoengine.Document):
     user_name = mongoengine.StringField()
+    user_avatar = mongoengine.StringField()
     user_be_agreed = mongoengine.StringField()
     user_be_thanked = mongoengine.StringField()
     user_followees = mongoengine.StringField()
